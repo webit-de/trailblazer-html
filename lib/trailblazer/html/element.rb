@@ -103,8 +103,8 @@ module Trailblazer::Html
       end
     end
 
-    # return a closed start tag (e.g. <input name="body"/>)
-    def closed_start_tag
+    # return a self closing start tag (e.g. <svg/>)
+    def self_closing_start_tag
       start_tag.insert(-2, '/')
     end
 

@@ -3,6 +3,9 @@ module Trailblazer::Html
   # the provided function providing the element as a variable to that function.
   # this class also provides some simple helpers to make it easier to define your html.
   class HtmlBlock
+    extend Forwardable
+    def_delegators :@element, :start_tag, :self_closing_start_tag, :end_tag, :content
+
     def initialize(element, fn)
       @fn = fn
       @element = element
@@ -21,22 +24,6 @@ module Trailblazer::Html
     # Useful when your html block is a bit more than one line
     def concat(content)
       @output << content.to_s
-    end
-
-    # return the start/opening tag with the element
-    # attributes hash converted into valid html attributes
-    def start_tag
-      element.start_tag
-    end
-
-    # return a closed start tag (e.g. <input name="body"/>)
-    def closed_start_tag
-      element.closed_start_tag
-    end
-
-    # returns the end/ closing tag for an element
-    def end_tag
-      element.end_tag
     end
 
     private

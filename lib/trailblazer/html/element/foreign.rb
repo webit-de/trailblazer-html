@@ -4,12 +4,12 @@ module Trailblazer::Html
   class Element
     class Foreign < Component
       html do |element|
-        if has_content?
+        if element.has_content?
           concat start_tag
-          concat element.content
+          concat content
           concat end_tag
         else
-          closed_start_tag
+          self_closing_start_tag
         end
       end
     end

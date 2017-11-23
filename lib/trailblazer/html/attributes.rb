@@ -37,6 +37,7 @@ module Trailblazer::Html
           value.each_pair do |k, v|
             next if v.nil?
             output << sep
+            v = v.to_json if v.is_a?(Array)
             output << %(#{key_to_attr_name(key)}-#{attribute_html(k, v, escape: escape)})
           end
         elsif BOOLEAN_ATTRIBUTES.include?(key)
