@@ -1,10 +1,8 @@
-require 'trailblazer/html/element/normal'
-require 'trailblazer/html/element/modules/container'
+require 'trailblazer/html/element/component'
 
 module Trailblazer::Html
   class Element
-    class Foreign < Normal
-      include Trailblazer::Html::Element::Modules::Container
+    class Foreign < Component
       html do |element|
         if has_content?
           concat start_tag

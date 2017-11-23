@@ -61,6 +61,10 @@ class RailsHelperTest < Minitest::Test
     assert_equal "<p value=\"symbol\"></p>", tag("p", value: :symbol)
   end
 
+  def test_tag_options_accepts_big_decimal_option
+    assert_equal "<p value=\"-123.456\"></p>", tag("p", value: BigDecimal.new("-123.456"))
+  end
+
   def test_tag_options_accepts_integer_option_when_not_escaping
     assert_equal "<p value=\"42\"></p>", tag("p", value: 42)
   end
@@ -204,6 +208,11 @@ class RailsHelperTest < Minitest::Test
   def test_tag_builder_with_data_attributes
     assert_equal '<p data-number="1" data-string="hello" data-string-with-quotes="double&quot;quote&quot;party&quot;">limelight</p>',
       tag.p("limelight", data: { number: 1, string: "hello", string_with_quotes: 'double"quote"party"' })
+  end
+
+  def test_tag_builder_with_deeply_nested_data_attribute_hashes
+    assert_equal '<p data-nested="{&quot;nix&quot;:null,&quot;test&quot;:&quot;foo&quot;}"></p>',
+      tag.p('', data: { nested: { nix: nil, test: 'foo' } })
   end
 
   def test_cdata_section

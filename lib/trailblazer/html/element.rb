@@ -13,10 +13,14 @@ module Trailblazer::Html
     inheritable_attr :processing_hash
     inheritable_attr :option_keys
     inheritable_attr :tag_name
+    inheritable_attr :html_context
+    inheritable_attr :html_blocks
 
     self.default_hash = {}
     self.processing_hash = {}
-    self.option_keys = []
+    self.option_keys = [:escape_attributes]
+    self.html_blocks = {}
+    self.html_context = :default
 
     # set the default value of an option or attribute
     # you can make this conditional by providing a condition
@@ -52,18 +56,41 @@ module Trailblazer::Html
       self.tag_name = name
     end
 
-    def initialize(builder: nil, **options)
+    # define what your html should look like
+    # this block is executed in the context of an HtmlBlock instance
+    def self.html(context = :default, &block)
+      self.html_blocks[context] = block
+    end
+
+    # a convenient way of changing the key for a context
+    # useful for inheritance if you want to replace a context
+    # but still access the original function
+    def self.rename_html_context(old_context, new_context)
+      self.html_blocks[new_context] = self.html_blocks.delete(old_context)
+    end
+
+    def self.call(**options, &block)
+      new(**options, &block)
+    end
+
+    def initialize(builder: nil, **options, &block)
       @builder = builder
       @options = options
       normalize_options
       process_options
       @tag = self.class.tag_name
+      @block = block
+      @html_blocks = define_html_blocks
     end
-    attr_reader :tag, :builder, :options
+    attr_reader :tag, :builder, :html_blocks, :options
 
     def attributes
       attrs = @options.select { |k, v| !option_key?(k) }
       Attributes[attrs]
+    end
+
+    def escape_attributes?
+      !@options.has_key?(:escape_attributes) || @options[:escape_attributes]
     end
 
     # return the start/opening tag with the element
@@ -72,7 +99,7 @@ module Trailblazer::Html
       if attributes.empty?
         "<#{tag}>"
       else
-        "<#{tag}#{attributes.to_html}>"
+        "<#{tag}#{attributes.to_html(escape: escape_attributes?)}>"
       end
     end
 
@@ -86,7 +113,19 @@ module Trailblazer::Html
       "</#{tag}>"
     end
 
+    def to_html(context: nil)
+      context ||= self.class.html_context
+      html_blocks[context].call
+    end
+    alias_method :to_s, :to_html
+
     private
+
+    def define_html_blocks
+      self.class.html_blocks.each_with_object({}) do |(context, block), hash|
+        hash[context] = HtmlBlock.new(self, block)
+      end
+    end
 
     # Options passed into our element instance (@options) take precident over class level defaults
     # Take each default value and merge it with options.

@@ -1,9 +1,7 @@
 require 'trailblazer/html/element'
 require 'trailblazer/html/element/void'
-require 'trailblazer/html/element/normal'
+require 'trailblazer/html/element/component'
 require 'trailblazer/html/element/foreign'
-require 'trailblazer/html/element/module'
-require 'trailblazer/html/element/modules/container'
 require 'trailblazer/html/html_escape'
 require 'trailblazer/html/cdata'
 
@@ -43,15 +41,13 @@ module Trailblazer::Html
        nav noscript object ol optgroup option output p picture pre progress q rp rt ruby s samp
        section select slot small span strong sub summary sup table tbody td template
        tfoot th thead time title tr u ul var video).each do |tag_name|
-      define_class_constant Class.new(Trailblazer::Html::Element::Normal) {
-        include Trailblazer::Html::Element::Modules::Container
+      define_class_constant Class.new(Trailblazer::Html::Element::Component) {
         tag tag_name
       }
     end
 
     # HTML raw text element script
-    define_class_constant Class.new(Trailblazer::Html::Element::Normal) {
-      include Trailblazer::Html::Element::Modules::Container
+    define_class_constant Class.new(Trailblazer::Html::Element::Component) {
       include Trailblazer::Html::Cdata
       tag :script
 
@@ -61,8 +57,7 @@ module Trailblazer::Html
     }
 
     # HTML raw text element style
-    define_class_constant Class.new(Trailblazer::Html::Element::Normal) {
-      include Trailblazer::Html::Element::Modules::Container
+    define_class_constant Class.new(Trailblazer::Html::Element::Component) {
       include Trailblazer::Html::Cdata
       tag :style
 
@@ -71,8 +66,7 @@ module Trailblazer::Html
       end
     }
 
-    define_class_constant Class.new(Trailblazer::Html::Element::Normal) {
-      include Trailblazer::Html::Element::Modules::Container
+    define_class_constant Class.new(Trailblazer::Html::Element::Component) {
       include Trailblazer::Html::HtmlEscape
       tag :textarea
       add_option_keys :value
