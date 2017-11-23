@@ -1,0 +1,30 @@
+PATH
+  remote: .
+  specs:
+    trailblazer-html (0.1.0)
+      declarative (~> 0.0.4)
+      uber (>= 0.0.11, < 0.2.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    declarative (0.0.10)
+    erbse (0.1.1)
+      temple
+    minitest (5.10.3)
+    rake (10.5.0)
+    temple (0.8.0)
+    uber (0.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.16)
+  erbse (~> 0.1.1)
+  minitest (~> 5.0)
+  rake (~> 10.0)
+  trailblazer-html!
+
+BUNDLED WITH
+   1.16.0
