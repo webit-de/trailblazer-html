@@ -74,7 +74,8 @@ module Trailblazer::Html
       # add newline to preserve first newline in content
       # html escape the content
       def content
-        "\n#{html_escape_once(options[:value] || super)}"
+        text = (options[:value] || super).to_s
+        "#{"\n" if text[0] == "\n"}#{html_escape_once(text)}"
       end
     }
 

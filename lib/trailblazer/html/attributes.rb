@@ -1,5 +1,6 @@
 require 'set'
 require 'json'
+require 'bigdecimal'
 require 'trailblazer/html/html_escape'
 
 module Trailblazer::Html
@@ -29,7 +30,6 @@ module Trailblazer::Html
     # replaces underscores with - so we can use regular keys
     # allows one layer of nested hashes so we can define data options as a hash.
     def to_html(escape: true)
-      return if empty?
       output = "".dup
       sep    = " "
       each_pair do |key, value|
