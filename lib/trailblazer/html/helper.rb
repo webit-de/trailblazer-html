@@ -5,7 +5,7 @@ module Trailblazer::Html
   module Helper
     class BuilderWrapper < SimpleDelegator
       def method_missing(method, *args, &block)
-        super.to_s
+        super.to_html
       end
     end
 
@@ -30,7 +30,8 @@ module Trailblazer::Html
         if opts.is_a?(Hash)
           opts.each_pair { |k,v| options[k.to_sym] = v }
         end
-        builder.public_send(name, options).to_s
+        element = builder.public_send(name, options)
+        open ? element.to_html(context: :start) : element.to_html
       end
     end
 
@@ -43,7 +44,7 @@ module Trailblazer::Html
       else
         options[:content] = content
       end
-      builder.public_send(name, options, &block).to_s
+      builder.public_send(name, options, &block).to_html
     end
   end
 end
