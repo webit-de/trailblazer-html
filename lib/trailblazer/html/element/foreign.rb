@@ -6,7 +6,7 @@ module Trailblazer::Html
       html do |element|
         if element.has_content?
           concat start_tag
-          concat content
+          concat element.content
           concat end_tag
         else
           self_closing_start_tag

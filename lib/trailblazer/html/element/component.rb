@@ -7,7 +7,7 @@ module Trailblazer::Html
 
       html do |element|
         concat start_tag
-        concat content
+        concat element.content
         concat end_tag
       end
 

@@ -4,7 +4,7 @@ module Trailblazer::Html
   # this class also provides some simple helpers to make it easier to define your html.
   class HtmlBlock
     extend Forwardable
-    def_delegators :@element, :start_tag, :self_closing_start_tag, :end_tag, :content
+    def_delegators :@element, :start_tag, :self_closing_start_tag, :end_tag
 
     def initialize(element, fn)
       @fn = fn
