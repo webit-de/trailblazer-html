@@ -17,7 +17,9 @@ module Trailblazer::Html
     # It returns our html as a string
     def call
       @output = ''
-      instance_exec(element, &fn).to_s
+      block_result = instance_exec(element, &fn).to_s
+      # return the block_result only if the buffer is empty and so no concat was used
+      @output.empty? ? block_result : @output
     end
 
     # append a string to the output buffer.

@@ -26,8 +26,9 @@ class RailsHelperTest < Minitest::Test
         concat b.br
         concat content_tag(:span, 'baz')
         concat 'bar'
+        2.times { |i| concat i }
       end
-    assert_equal '<div>foo<br><span>baz</span>bar</div>', html
+    assert_equal '<div>foo<br><span>baz</span>bar01</div>', html
   end
 
   def test_tag_builder_with_string_options
